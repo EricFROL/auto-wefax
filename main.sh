@@ -16,12 +16,6 @@ function array_indexof() {
   done
   return 1
 }
-containsElement () {
-  local e match="$1"
-  shift
-  for e; do [[ "$e" == "$match" ]] && return 0; done
-  return 1
-}
 function contains() {
     local n=$#
     local value=${!n}
@@ -43,18 +37,10 @@ do
     if [ "$(echo "${schedule[@]}" | grep "$hora")" == "" ]
     then
         echo "No job to do."
-    else
+    else # comença el proces
+
         echo "Job found, initating..."
-        htarget=$(array_indexof "${schedule[@]}" $hora)  # | awk '{print substr($1,length($1)-2) }')
-        # containsElement "$hora" "${ptimeb[@]}"
-        # if [ $(echo $?) == 0 ]; then
-        #     echo "20 minuts"
-        # containsElement "$hora" "${ptimea[@]}"
-        # elif [ $(echo $?) == 0 ]; then
-        #     echo "19 minuts"
-        # else
-        #     echo "11 minuts"
-        # fi
+#       htarget=$(array_indexof "${schedule[@]}" $hora)  # | awk '{print substr($1,length($1)-2) }')
         if [ $(contains "${ptimea[@]}" "$hora") == "y" ]; then
             echo "19 minuts"
             timeout=1140
@@ -66,5 +52,8 @@ do
             timeout=660
         fi
         timeout $timeout rtl_fm -f 138881000 -M usb -T -s 48k | sox -r 48k -t raw -e s -b 16 -c 1 - -d | timeout $timeout fldigi
+        find /home/pi/.fldigi/images -type f -size +2M -exec mv "{}" /var/www/html/data/wefax-images/ \;
+
+
     fi
 done
