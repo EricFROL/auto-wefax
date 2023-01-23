@@ -35,8 +35,8 @@ function contains() {
     return 1
 }
 
-while true
-do
+while true 
+do 
     hora=$(date +%R -u)
     sleep 10
     echo "current workdate set as $hora"
@@ -57,14 +57,14 @@ do
         # fi
         if [ $(contains "${ptimea[@]}" "$hora") == "y" ]; then
             echo "19 minuts"
-            timeout=19
+            timeout=1140
         elif [ $(contains "${ptimeb[@]}" "$hora") == "y" ]; then
             echo "20 minuts"
-            timeout=20
+            timeout=1200
         else
             echo "11 minuts"
-            timeout=11
+            timeout=660
         fi
-        timeout $timeout rtl_fm -f 138881000 -M usb -T -s 48k | sox -r 48k -t raw -e s -b 16 -c 1 - -d | fldigi
+        timeout $timeout rtl_fm -f 138881000 -M usb -T -s 48k | sox -r 48k -t raw -e s -b 16 -c 1 - -d | timeout $timeout fldigi
     fi
 done
