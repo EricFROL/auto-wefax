@@ -29,8 +29,8 @@ function contains() {
     return 1
 }
 
-while true 
-do 
+while true
+do
     hora=$(date +%R -u)
     sleep 10
     echo "current workdate set as $hora"
@@ -51,8 +51,10 @@ do
             echo "11 minuts"
             timeout=660
         fi
-        timeout $timeout rtl_fm -f 138881000 -M usb -T -s 48k | sox -r 48k -t raw -e s -b 16 -c 1 - -d | timeout $timeout fldigi
+        timeout -k 10 $timeout rtl_fm -f 138881000 -M usb -T -s 48k | sox -r 48k -t raw -e s -b 16 -c 1 - -d | timeout -k 10 $timeout fldigi
         find /home/pi/.fldigi/images -type f -size +2M -exec mv "{}" /var/www/html/data/wefax-images/ \;
+        cname=$(ls -tr /var/www/html/data/wefax-images | tail -n 1)
+        ls -tr /var/www/html/data/wefax-images | tail -n 1 | xargs -I{} mv {} "/var/www/html/data/wefax-images/$hora-wefax.png"
 
 
     fi
