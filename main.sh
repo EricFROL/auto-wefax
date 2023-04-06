@@ -1,7 +1,7 @@
 #!/bin/bash
 source /home/pi/auto-wefax/schedule.list
 hora=$(date +%R -u)
-
+dia=$(date +%y/%m/%d)
 function array_indexof() {
   [ $# -lt 2 ] && return 1
   local a=("$@")
@@ -51,14 +51,14 @@ do
             echo "11 minuts"
             timeout=660
         fi
-        timeout -k 10 $timeout rtl_fm -f 138881000 -M usb -T -s 48k | sox -r 48k -t raw -e s -b 16 -c 1 - -d | timeout -k 10 $timeout fldigi
+        timeout -k 10 $timeout rtl_fm -f 138881000 -M usb -T -s 48k -d 1 | sox -r 48k -t raw -e s -b 16 -c 1 - -d | timeout -k 10 $timeout fldigi
         find /home/pi/.fldigi/images -type f -size +2M -exec mv "{}" /var/www/html/data/wefax-images/ \;
         cname=$(ls -tr /var/www/html/data/wefax-images | tail -n 1)
         cd /var/www/html/data/wefax-images
-        ls -tr /var/www/html/data/wefax-images | tail -n 1 | xargs -I{} mv {} "/var/www/html/data/wefax-images/$hora-wefax.png"
+        ls -tr /var/www/html/data/wefax-images | tail -n 1 | xargs -I{} mv {} "/var/www/html/data/wefax-images/$hora-$dia-wefax.png"
         cd /home/pi/auto-wefax
-        convert /var/www/html/data/wefax-images/$hora-wefax.png -roll +810+0 /var/www/html/data/wefax-images/$hora-wefax.png
-        rtl_biast -b 0
+        convert /var/www/html/data/wefax-images/$hora-$dia-wefax.png -roll +1215+0 /var/www/html/data/wefax-images/$hora-$dia-wefax.png
+        rtl_biast -d 0 -b 0
 
     fi
 done
