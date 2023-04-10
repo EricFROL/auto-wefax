@@ -1,7 +1,7 @@
 #!/bin/bash
 source /home/pi/auto-wefax/schedule.list
 hora=$(date +%R -u)
-dia=$(date +%y/%m/%d)
+dia=$(date +%y-%m-%d)
 function array_indexof() {
   [ $# -lt 2 ] && return 1
   local a=("$@")
@@ -32,6 +32,7 @@ function contains() {
 while true
 do
     hora=$(date +%R -u)
+    dia=$(date +%y-%m-%d)
     sleep 10
     echo "current workdate set as $hora"
     if [ "$(echo "${schedule[@]}" | grep "$hora")" == "" ]
