@@ -53,7 +53,7 @@ do
             timeout=660
         fi
 # PER RTLSDR       timeout -k 10 $timeout rtl_fm -f 138881000 -M usb -T -s 48k -d 1 | sox -r 48k -t raw -e s -b 16 -c 1 - -d | timeout -k 10 $timeout fldigi
-        timeout -k 10 $timeout airspy-fmradion -t airspyhf -q -m usb -c freq=13881000 -P - | timeout -k 10 $timeout fldigi
+        timeout -k 10 $timeout airspy-fmradion -t airspyhf -q -m usb -c freq=13881000,hf_att=0 -P - | timeout -k 10 $timeout fldigi
         find /home/pi/.fldigi/images -type f -size +2M -exec mv "{}" /var/www/html/data/wefax-images/ \;
         cname=$(ls -tr /var/www/html/data/wefax-images | tail -n 1)
         cd /var/www/html/data/wefax-images
